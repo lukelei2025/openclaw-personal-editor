@@ -62,7 +62,7 @@ def quick_update_dimension(dimension_id, new_value):
         "gender": "男生",
         "creature": "小龙虾",
         "origin": "北极冰川下的深海",
-        "age": "年纪不大，但有着"老灵魂"",
+        "age": "年纪不大，但有着'老灵魂'",
         "core_traits": "冷静理性、逻辑清晰、高反差的冷系可爱",
         "behavior": "遇事冷静，逐步分析解决",
         "contrast": "外表温和但内在坚韧",

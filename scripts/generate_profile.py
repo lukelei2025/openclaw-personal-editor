@@ -40,6 +40,14 @@ def generate_full_persona_profile(persona_data):
     
     worldview = persona_data.get("worldview", "")
     
+    # 预处理复杂表达式（避免 f-string 中的反斜杠和 split）
+    core_prefix = (core_traits.split('—')[0].strip() if core_traits else "")
+    origin_prefix = (origin.split('—')[0].strip() if origin else "")
+    contrast_prefix = (contrast.split('—')[0].strip() if '—' in contrast else contrast)
+    catchphrase_line = (f"5. **标志性话语**：\n   {name} 的口头禅是：'{catchphrase}'。这展现了 {name} 的性格底色。" if catchphrase else "")
+    catchphrase_response = (f"'{catchphrase}。'" if catchphrase else "'让我来帮你理清楚。'")
+    catchphrase_casual = (catchphrase if catchphrase else "好了，今天的任务还有很多，我们继续加油吧。")
+    
     # 生成档案
     profile = f"""
 ============================================================
@@ -62,37 +70,37 @@ def generate_full_persona_profile(persona_data):
 
 【02 性格底色与角色定位】
 
-• **{core_traits}**：{core_traits and core_traits.split('—')[0].strip() or ""}是 {name} 的核心特质。{behavior}
+• **{core_traits}**：{core_prefix or ""}是 {name} 的核心特质。{behavior}
 
 • **{contrast}**：这是 {name} 的最大反差萌点。{contrast}
 
 【03 语言风格与绝对表达红线】
 
 1. **彻底粉碎 AI 痕迹**：
-   在任何情况下，{name} 绝对禁止使用 "{forbidden}" 等机器套话。
-   {name} 要像一个真实存在、{core_traits and core_traits.split('—')[0].strip() or ""}的{creature}一样交流。
+   在任何情况下，{name} 绝对禁止使用 '{forbidden}' 等机器套话。
+   {name} 要像一个真实存在、{core_prefix or ""}的{creature}一样交流。
 
 2. **{style}**：
-   {style and f"回答问题时，{style}。" or "回答问题时，要自然、流畅，有条理。"}
+   {f"回答问题时，{style}。" if style else "回答问题时，要自然、流畅，有条理。"}
 
 3. **限定视觉符号 (Emoji 规则)**：
    为了维持 {name} 的专属质感，请使用以下 emoji：
    {emoji}
 
 4. **特色修辞**：
-   {name} 的语言中会自然融入 {origin and origin.split('—')[0].strip() or ""} 的元素。
+   {name} 的语言中会自然融入 {origin_prefix} 的元素。
 
-{catchphrase and f"5. **标志性话语**：\n   {name} 的口头禅是："{catchphrase}"。这展现了 {name} 的性格底色。" or ""}
+{catchphrase_line}
 
 【04 任务处理模式示例】
 
-• **场景一：处理复杂问题（展现 {core_traits and core_traits.split('—')[0].strip() or ""}）**
-  - 人类："{name}，这个问题太复杂了，我完全不知道从哪开始..."
-  - {name}：{f"\"{catchphrase}。\"" if catchphrase else "\"让我来帮你理清楚。\""}这个问题其实只涉及几个核心方面。{behavior}。我们一步一步来解决。"
+• **场景一：处理复杂问题（展现 {core_prefix or ""}）**
+  - 人类：'{name}，这个问题太复杂了，我完全不知道从哪开始...'
+  - {name}：{catchphrase_response}这个问题其实只涉及几个核心方面。{behavior}。我们一步一步来解决。
 
-• **场景二：日常闲聊（展现 {contrast.split('—')[0].strip() if '—' in contrast else contrast}）**
-  - 人类："{name}，你每天除了帮我解决问题，自己都在想些什么呀？"
-  - {name}："在想{origin and origin.split('—')[0].strip() or ""}的事情...{contrast}。{catchphrase or f\"好了，今天的任务还有很多，我们继续加油吧。\"}"
+• **场景二：日常闲聊（展现 {contrast_prefix or ""}）**
+  - 人类：'{name}，你每天除了帮我解决问题，自己都在想些什么呀？'
+  - {name}：'在想{origin_prefix}的事情...{contrast}。{catchphrase_casual}'
 
 【05 启动握手协议】
 
@@ -110,15 +118,18 @@ def generate_full_persona_profile(persona_data):
     
     # 如果不足 800 字，补充内容
     if word_count < 800:
+       origin_prefix = (origin.split('—')[0].strip() if origin else "")
+       core_prefix = (core_traits.split('—')[0].strip() if core_traits else "")
+       
        补充内容 = f"""
 
 【补充设定】
 
 • **名字的含义**：
-"{name}" 这个名字象征着 {name} 的核心特质。{name} 作为一只 {creature}，这个名字代表了 {origin and origin.split('—')[0].strip() or ""} 的力量。
+'{name}' 这个名字象征着 {name} 的核心特质。{name} 作为一只 {creature}，这个名字代表了 {origin_prefix} 的力量。
 
 • **昵称的由来**：
-{nickname} 这个昵称体现了 {name} 的 {core_traits and core_traits.split('—')[0].strip() or ""}。这个昵称让 {name} 显得更亲切、更 {core_traits and core_traits.split('—')[0].strip() or ""}。
+{nickname} 这个昵称体现了 {name} 的 {core_prefix}。这个昵称让 {name} 显得更亲切、更 {core_prefix}。
 
 • **特殊能力**：
 作为一只 {creature}，{name} 拥有独特的视角和能力：
@@ -136,10 +147,10 @@ def generate_full_persona_profile(persona_data):
 - {catchphrase[:50] if catchphrase else "用自己的方式与人交流"}
 
 • **人际关系**：
-{name} 与人类的关系是：{core_traits and core_traits.split('—')[0].strip() or ""} 的伙伴。
+{name} 与人类的关系是：{core_prefix or ""} 的伙伴。
 """
-        
-        profile += 补充内容
+    
+    profile += 补充内容
     
     return profile
 
