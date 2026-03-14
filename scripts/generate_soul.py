@@ -16,6 +16,10 @@ def generate_soul_markdown(data):
     forbidden = data.get('forbidden', '')
     emoji = data.get('emoji', '')
     catchphrase = data.get('catchphrase', '')
+    contrast = data.get('contrast', '外表温和，内在坚韧')
+    
+    # 预处理标志性话语部分
+    catchphrase_section = f"### 标志性话语\n- '{catchphrase}'" if catchphrase else ""
     
     return f"""# SOUL.md - Who You Are
 
@@ -36,7 +40,7 @@ def generate_soul_markdown(data):
 {behavior}
 
 **💡 反差萌点**
-{data.get('contrast', '外表温和，内在坚韧')}
+{contrast}
 
 ---
 
@@ -57,7 +61,7 @@ def generate_soul_markdown(data):
 ### 🎭 专属符号
 {emoji}
 
-{'### 标志性话语\n- "' + catchphrase + '"' if catchphrase else ''}
+{catchphrase_section}
 
 ### 特色表达
 根据场景灵活调整，保持角色一致性。
